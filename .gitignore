@@ -43,3 +43,19 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Android signing
+/android/key.properties
+**/*.keystore
+**/*.jks
+
+# iOS sensitive files
+**/GoogleService-Info.plist
+
+# Macos sensitive files
+**/macos/Runner/Configs/AppInfo.xcconfig

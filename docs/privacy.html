@@ -1,108 +1,542 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - Pomodoro</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <style>
-        .privacy-content {
-            padding: 6rem 1rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Pomodoro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        h1 {
-            margin-bottom: 2rem;
-            font-size: 3rem;
-        }
+    :root {
+      --accent: #da7756;
+      --accent-dim: rgba(218,119,86,0.12);
+      --accent-glow: rgba(218,119,86,0.25);
+      --bg: #000;
+      --bg2: #0d0d0d;
+      --bg3: #161616;
+      --border: rgba(255,255,255,0.07);
+      --text: #fff;
+      --text-muted: rgba(255,255,255,0.45);
+      --radius: 20px;
+    }
 
-        h2 {
-            margin-top: 3rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
+    html { scroll-behavior: smooth; }
 
-        p {
-            margin-bottom: 1.5rem;
-            color: var(--text-light);
-            font-size: 1.1rem;
-        }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-        .contact-card {
-            background-color: var(--bg-alt);
-            padding: 2rem;
-            border-radius: 20px;
-            margin-top: 3rem;
-        }
-    </style>
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── NAV ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: var(--border);
+    }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      padding: 80px 24px 60px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .page-hero .breadcrumb {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .page-hero .breadcrumb a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .page-hero .breadcrumb a:hover { text-decoration: underline; }
+    .page-hero .breadcrumb span { opacity: 0.4; }
+
+    .page-hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+
+    .page-hero .meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(218,119,86,0.2);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    .badge .dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
+
+    .meta-date {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    /* ── CONTENT LAYOUT ── */
+    .privacy-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 60px;
+      padding: 60px 24px 100px;
+      align-items: start;
+    }
+
+    /* ── SIDEBAR TOC ── */
+    .toc {
+      position: sticky;
+      top: 84px;
+    }
+
+    .toc-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .toc-list a {
+      display: block;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 7px 12px;
+      border-radius: 8px;
+      border-left: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .toc-list a:hover {
+      color: var(--text);
+      background: var(--bg3);
+      border-left-color: var(--accent);
+    }
+
+    .toc-list a.active {
+      color: var(--accent);
+      background: var(--accent-dim);
+      border-left-color: var(--accent);
+    }
+
+    /* ── ARTICLE ── */
+    .privacy-article {
+      max-width: 700px;
+    }
+
+    .section-block {
+      margin-bottom: 56px;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .section-block:nth-child(1) { animation-delay: 0.05s; }
+    .section-block:nth-child(2) { animation-delay: 0.1s; }
+    .section-block:nth-child(3) { animation-delay: 0.15s; }
+    .section-block:nth-child(4) { animation-delay: 0.2s; }
+    .section-block:nth-child(5) { animation-delay: 0.25s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-block h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-block h2 .s-icon {
+      width: 32px; height: 32px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(218,119,86,0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .section-block p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+
+    .section-block p:last-child { margin-bottom: 0; }
+
+    .section-block strong { color: var(--text); font-weight: 600; }
+
+    .perm-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .perm-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .perm-list li .perm-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .perm-list li strong { color: var(--text); }
+
+    /* ── CONTACT CARD ── */
+    .contact-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+      pointer-events: none;
+    }
+
+    .contact-card h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .contact-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .email-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .email-link:hover {
+      background: #e8896a;
+      transform: translateY(-2px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+    }
+
+    .footer-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer p { color: var(--text-muted); font-size: 13px; }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .privacy-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 40px 24px 80px;
+      }
+      .toc { position: static; display: none; }
+      .page-hero { padding: 60px 24px 40px; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links { display: none; }
+      .page-hero h1 { font-size: 1.8rem; }
+    }
+  </style>
 </head>
-
 <body>
-    <header>
-        <nav class="container">
-            <div class="logo">
-                <a href="index.html"
-                    style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.5rem;">
-                    <span class="logo-icon">🎯</span>
-                    <span class="logo-text">Pomodoro</span>
-                </a>
-            </div>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main class="container">
-        <section class="privacy-content">
-            <h1>Privacy Policy</h1>
-            <p>Last updated: March 09, 2026</p>
+  <!-- NAV -->
+  <header>
+    <nav class="container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">🍅</div>
+        <span class="logo-text">Pomodoro</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">← Home</a></li>
+      </ul>
+    </nav>
+  </header>
 
-            <h2>Introduction</h2>
-            <p>This Privacy Policy describes how your personal information is handled when you use the Pomodoro app. We
-                value your privacy and are committed to protecting it through our compliance with this policy.</p>
+  <main>
 
-            <h2>Data Collection</h2>
-            <p><strong>Offline First:</strong> Pomodoro is designed to work offline. All your data, including focus
-                sessions, streak information, and settings, are stored locally on your device in a private database.</p>
-            <p><strong>No Tracking:</strong> We do not use any tracking pixels, analytics SDKs, or third-party cookies.
-                We do not collect your name, location, or usage patterns for advertising purposes.</p>
-
-            <h2>How We Use Data</h2>
-            <p>The data stored locally is used solely to provide the core functionality of the app, such as calculating
-                your focus streaks and showing your milestone progress.</p>
-
-            <h2>Permissions</h2>
-            <p>The app may request the following permissions:</p>
-            <ul>
-                <li><strong>Notifications:</strong> To alert you when a focus or break session ends.</li>
-                <li><strong>Vibration:</strong> To provide tactile feedback when a timer completes.</li>
-            </ul>
-
-            <div class="contact-card">
-                <h2>Contact Us</h2>
-                <p>If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at:
-                </p>
-                <p><strong>Email:</strong> <a href="mailto:0112cs221008@gmail.com"
-                        style="color: var(--primary); font-weight: 600;">0112cs221008@gmail.com</a></p>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container footer-content">
-            <p>&copy; 2026 Pomodoro App. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="index.html">Home</a>
-                <a href="mailto:0112cs221008@gmail.com">Support</a>
-            </div>
+    <!-- PAGE HERO -->
+    <div class="page-hero">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span>/</span>
+          Privacy Policy
         </div>
-    </footer>
-</body>
+        <h1>Privacy Policy</h1>
+        <div class="meta">
+          <div class="badge"><span class="dot"></span> Up to date</div>
+          <span class="meta-date">Last updated: March 09, 2026</span>
+        </div>
+      </div>
+    </div>
 
+    <!-- CONTENT -->
+    <div class="privacy-layout container">
+
+      <!-- SIDEBAR TOC -->
+      <aside class="toc">
+        <div class="toc-label">On this page</div>
+        <ul class="toc-list">
+          <li><a href="#intro">Introduction</a></li>
+          <li><a href="#data">Data Collection</a></li>
+          <li><a href="#usage">How We Use Data</a></li>
+          <li><a href="#permissions">Permissions</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+        </ul>
+      </aside>
+
+      <!-- ARTICLE -->
+      <article class="privacy-article">
+
+        <div class="section-block" id="intro">
+          <h2><span class="s-icon">👋</span> Introduction</h2>
+          <p>This Privacy Policy describes how your personal information is handled when you use the Pomodoro app. We value your privacy and are fully committed to protecting it through compliance with this policy.</p>
+          <p>By using the app, you agree to the collection and use of information in accordance with this policy. We keep it simple because we collect almost nothing.</p>
+        </div>
+
+        <div class="section-block" id="data">
+          <h2><span class="s-icon">🔒</span> Data Collection</h2>
+          <p><strong>Offline First:</strong> Pomodoro is designed to work completely offline. All your data — including focus sessions, streak information, and settings — are stored locally on your device in a private database.</p>
+          <p><strong>No Tracking:</strong> We do not use any tracking pixels, analytics SDKs, or third-party cookies. We do not collect your name, location, or usage patterns for advertising purposes. Ever.</p>
+        </div>
+
+        <div class="section-block" id="usage">
+          <h2><span class="s-icon">⚙️</span> How We Use Data</h2>
+          <p>The data stored locally is used solely to provide the core functionality of the app, such as calculating your focus streaks and displaying your milestone progress.</p>
+          <p>This data never leaves your device. We have no servers receiving your personal information.</p>
+        </div>
+
+        <div class="section-block" id="permissions">
+          <h2><span class="s-icon">📋</span> Permissions</h2>
+          <p>The app may request the following device permissions:</p>
+          <ul class="perm-list">
+            <li>
+              <span class="perm-icon">🔔</span>
+              <div><strong>Notifications</strong><br>To alert you when a focus or break session ends so you never miss a transition.</div>
+            </li>
+            <li>
+              <span class="perm-icon">📳</span>
+              <div><strong>Vibration</strong><br>To provide tactile feedback when a timer completes, even when your phone is on silent.</div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="section-block" id="contact">
+          <div class="contact-card">
+            <h2>Contact Us</h2>
+            <p>If you have any questions or suggestions about our Privacy Policy, don't hesitate to reach out. We're happy to help.</p>
+            <a href="mailto:0112cs221008@gmail.com" class="email-link">
+              ✉ 0112cs221008@gmail.com
+            </a>
+          </div>
+        </div>
+
+      </article>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-content">
+      <p>© 2026 Pomodoro App. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="mailto:0112cs221008@gmail.com">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Highlight active TOC link on scroll
+    const sections = document.querySelectorAll('.section-block');
+    const tocLinks = document.querySelectorAll('.toc-list a');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
 </html>

@@ -1,110 +1,829 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pomodoro - Master Your Focus</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pomodoro — Master Your Focus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #da7756;
+      --accent-dim: rgba(218,119,86,0.12);
+      --accent-glow: rgba(218,119,86,0.25);
+      --bg: #000;
+      --bg2: #0d0d0d;
+      --bg3: #161616;
+      --border: rgba(255,255,255,0.07);
+      --text: #fff;
+      --text-muted: rgba(255,255,255,0.45);
+      --radius: 20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── NAV ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .logo-icon img { width: 20px; height: 20px; object-fit: contain; }
+
+    .logo-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: var(--border);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      min-height: calc(100vh - 64px);
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(218,119,86,0.2);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+    }
+
+    .hero-eyebrow span { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .highlight { color: var(--accent); }
+
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 17px;
+      font-weight: 300;
+      max-width: 440px;
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 32px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      background: #e8896a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 40px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      color: var(--text);
+      border-color: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.04);
+    }
+
+    /* ── TIMER MOCKUP ── */
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .timer-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 340px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timer-card::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .mode-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg2);
+      border-radius: 999px;
+      padding: 4px;
+      margin-bottom: 36px;
+    }
+
+    .mode-tab {
+      flex: 1;
+      padding: 7px 4px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mode-tab.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .ring-wrap {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 24px;
+    }
+
+    .ring-wrap svg {
+      transform: rotate(-90deg);
+      width: 160px;
+      height: 160px;
+    }
+
+    .ring-bg { fill: none; stroke: var(--bg2); stroke-width: 6; }
+    .ring-progress {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 440;
+      stroke-dashoffset: 110;
+      filter: drop-shadow(0 0 6px var(--accent));
+      transition: stroke-dashoffset 0.5s;
+    }
+
+    .timer-time {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .timer-digits {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .timer-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .timer-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 32px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: all 0.2s;
+      width: 100%;
+    }
+
+    .timer-btn:hover { background: #e8896a; transform: translateY(-1px); }
+
+    .dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--bg2);
+      border: 1.5px solid var(--border);
+      transition: all 0.3s;
+    }
+
+    .dot.filled { background: var(--accent); border-color: var(--accent); }
+
+    /* ── FEATURES ── */
+    .features {
+      padding: 120px 24px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 16px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      transition: border-color 0.25s, transform 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, var(--accent-dim), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(218,119,86,0.3);
+      transform: translateY(-4px);
+    }
+
+    .feature-card:hover::after { opacity: 1; }
+
+    .feat-icon {
+      width: 44px; height: 44px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(218,119,86,0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    /* ── DOWNLOAD ── */
+    .download {
+      padding: 0 24px 120px;
+    }
+
+    .download-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 64px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .download-card::before {
+      content: '';
+      position: absolute;
+      top: -100px; left: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(218,119,86,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .download-text h2 { margin-bottom: 10px; }
+    .download-text p { color: var(--text-muted); font-size: 16px; }
+
+    .apk-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .apk-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 28px;
+      border-radius: 14px;
+      text-decoration: none;
+      transition: all 0.25s;
+      text-align: center;
+      min-width: 220px;
+    }
+
+    .apk-btn:first-child {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 24px var(--accent-glow);
+    }
+
+    .apk-btn:first-child:hover {
+      background: #e8896a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px var(--accent-glow);
+    }
+
+    .apk-btn.secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .apk-btn.secondary:hover {
+      border-color: rgba(218,119,86,0.3);
+      color: var(--text);
+      background: var(--accent-dim);
+    }
+
+    .apk-btn span { font-weight: 700; font-size: 14px; }
+    .apk-btn small { font-size: 11px; margin-top: 3px; opacity: 0.7; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+    }
+
+    .footer-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer p { color: var(--text-muted); font-size: 13px; }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 auto;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .feature-grid { grid-template-columns: repeat(2, 1fr); }
+      .download-card {
+        grid-template-columns: 1fr;
+        padding: 40px 32px;
+        text-align: center;
+      }
+      .apk-links { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+    }
+
+    @media (max-width: 720px) {
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding-top: 60px;
+        padding-bottom: 60px;
+        gap: 48px;
+        text-align: center;
+      }
+      .hero-desc { margin: 0 auto 40px; }
+      .cta-group { justify-content: center; }
+      .hero-visual { order: -1; }
+      .timer-card { max-width: 300px; padding: 36px 28px; }
+      .nav-links { display: none; }
+      .features { padding: 80px 24px; }
+      .download { padding: 0 24px 80px; }
+    }
+
+    @media (max-width: 560px) {
+      .feature-grid { grid-template-columns: 1fr; }
+      .apk-links { flex-direction: column; align-items: center; }
+      .apk-btn { min-width: 100%; }
+      .download-card { padding: 32px 24px; border-radius: 20px; }
+    }
+
+    /* ── FADE IN ANIMATION ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-content > * {
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-content > *:nth-child(2) { animation-delay: 0.2s; }
+    .hero-content > *:nth-child(3) { animation-delay: 0.3s; }
+    .hero-content > *:nth-child(4) { animation-delay: 0.4s; }
+
+    .hero-visual {
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .feature-card {
+      animation: fadeUp 0.5s ease both;
+    }
+    .feature-card:nth-child(1) { animation-delay: 0.1s; }
+    .feature-card:nth-child(2) { animation-delay: 0.2s; }
+    .feature-card:nth-child(3) { animation-delay: 0.3s; }
+    .feature-card:nth-child(4) { animation-delay: 0.4s; }
+  </style>
 </head>
-
 <body>
-    <header>
-        <nav class="container">
-            <div class="logo">
-                <span class="logo-icon">🎯</span>
-                <span class="logo-text">Pomodoro</span>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#download">Download</a></li>
-                <li><a href="privacy.html">Privacy</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main>
-        <section class="hero container">
-            <div class="hero-content">
-                <h1>Unlock Your <span class="highlight">Peak Productivity</span></h1>
-                <p>The ultimate Pomodoro companion designed to help you focus, achieve milestones, and build lasting
-                    habits.</p>
-                <div class="cta-group">
-                    <a href="#download" class="btn btn-primary">Get the App</a>
-                    <a href="#features" class="btn btn-secondary">Learn More</a>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <div class="timer-mockup">
-                    <div class="timer-ring">
-                        <div class="timer-display">25:00</div>
-                    </div>
-                    <div class="timer-label">Focus Session</div>
-                </div>
-            </div>
-        </section>
+  <!-- NAV -->
+  <header>
+    <nav class="container">
+      <a href="#" class="logo">
+        <div class="logo-icon">🍅</div>
+        <span class="logo-text">Pomodoro</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#download">Download</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+      </ul>
+    </nav>
+  </header>
 
-        <section id="features" class="features container">
-            <div class="section-header">
-                <h2>Why Choose Pomodoro?</h2>
-                <p>A minimalist design packed with powerful features.</p>
-            </div>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="icon">🔄</div>
-                    <h3>Smart Cycles</h3>
-                    <p>Automatic transitions between focus and break sessions to keep you in the flow.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🔥</div>
-                    <h3>Streak Tracking</h3>
-                    <p>Build consistency with daily streaks and visualize your progress over time.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🏆</div>
-                    <h3>Milestones</h3>
-                    <p>Level up from Bronze to Platinum as you complete more focus sessions.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🌓</div>
-                    <h3>Adaptive UI</h3>
-                    <p>Premium dark and light modes tailored for any environment.</p>
-                </div>
-            </div>
-        </section>
+  <main>
 
-        <section id="download" class="download container">
-            <div class="download-card">
-                <h2>Ready to Focus?</h2>
-                <p>Download the latest release for your Android device.</p>
-                <div class="apk-links">
-                    <a href="#" class="apk-btn">
-                        <span>Download APK (arm64-v8a)</span>
-                        <small>Modern 64-bit Devices</small>
-                    </a>
-                    <a href="#" class="apk-btn secondary">
-                        <span>Download APK (armeabi-v7a)</span>
-                        <small>Universal / Older Devices</small>
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container footer-content">
-            <p>&copy; 2026 Pomodoro App. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="privacy.html">Privacy Policy</a>
-                <a href="mailto:0112cs221008@gmail.com">Support</a>
-            </div>
+    <!-- HERO -->
+    <section class="hero container">
+      <div class="hero-content">
+        <div class="hero-eyebrow"><span></span> Now Available for Android</div>
+        <h1>Unlock Your<br><span class="highlight">Peak Productivity</span></h1>
+        <p class="hero-desc">The ultimate Pomodoro companion designed to help you focus, achieve milestones, and build lasting habits — one session at a time.</p>
+        <div class="cta-group">
+          <a href="#download" class="btn btn-primary">↓ Get the App</a>
+          <a href="#features" class="btn btn-secondary">Learn More</a>
         </div>
-    </footer>
+      </div>
 
-    <script src="script.js"></script>
+      <div class="hero-visual">
+        <div class="timer-card">
+          <div class="mode-tabs">
+            <div class="mode-tab active">Focus</div>
+            <div class="mode-tab">Short</div>
+            <div class="mode-tab">Long</div>
+          </div>
+
+          <div class="ring-wrap">
+            <svg viewBox="0 0 160 160">
+              <circle class="ring-bg" cx="80" cy="80" r="70"/>
+              <circle class="ring-progress" cx="80" cy="80" r="70"/>
+            </svg>
+            <div class="timer-time">
+              <div class="timer-digits" id="timerDisplay">25:00</div>
+              <div class="timer-sub">Focus Session</div>
+            </div>
+          </div>
+
+          <button class="timer-btn" id="timerBtn">▶ Start Session</button>
+
+          <div class="dots">
+            <div class="dot filled"></div>
+            <div class="dot filled"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- FEATURES -->
+    <section id="features" class="features">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Why Pomodoro?</div>
+          <h2>Built for Deep Work</h2>
+          <p>A minimalist design packed with everything you need to stay in flow.</p>
+        </div>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feat-icon">🔄</div>
+            <h3>Smart Cycles</h3>
+            <p>Automatic transitions between focus and break sessions to keep you in the flow without interruption.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feat-icon">🔥</div>
+            <h3>Streak Tracking</h3>
+            <p>Build consistency with daily streaks and visualize your progress over time on a heatmap calendar.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feat-icon">🏆</div>
+            <h3>Milestones</h3>
+            <p>Level up from Bronze to Platinum as you complete more focus sessions and master your productivity.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feat-icon">🌓</div>
+            <h3>Adaptive UI</h3>
+            <p>Premium dark and light modes tailored for any environment — morning hustle or late-night grind.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DOWNLOAD -->
+    <section id="download" class="download">
+      <div class="container">
+        <div class="download-card">
+          <div class="download-text">
+            <h2>Ready to Focus?</h2>
+            <p>Download the latest release for your Android device. Free, no ads, no account required.</p>
+          </div>
+          <div class="apk-links">
+            <a href="#" class="apk-btn">
+              <span>Download APK</span>
+              <small>arm64-v8a · Modern 64-bit Devices</small>
+            </a>
+            <a href="#" class="apk-btn secondary">
+              <span>Download APK</span>
+              <small>armeabi-v7a · Universal / Older Devices</small>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-content">
+      <p>© 2026 Pomodoro App. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="mailto:0112cs221008@gmail.com">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── LIVE DEMO TIMER ──
+    let seconds = 25 * 60;
+    let running = false;
+    let interval = null;
+    const totalSecs = 25 * 60;
+
+    const display = document.getElementById('timerDisplay');
+    const btn = document.getElementById('timerBtn');
+    const ring = document.querySelector('.ring-progress');
+    const circumference = 2 * Math.PI * 70; // 439.8
+
+    function updateRing(secs) {
+      const progress = secs / totalSecs;
+      const offset = circumference * (1 - progress);
+      ring.style.strokeDasharray = circumference;
+      ring.style.strokeDashoffset = offset;
+    }
+
+    function formatTime(s) {
+      const m = Math.floor(s / 60).toString().padStart(2, '0');
+      const sec = (s % 60).toString().padStart(2, '0');
+      return `${m}:${sec}`;
+    }
+
+    updateRing(seconds);
+
+    btn.addEventListener('click', () => {
+      if (!running) {
+        running = true;
+        btn.textContent = '⏸ Pause Session';
+        interval = setInterval(() => {
+          if (seconds <= 0) {
+            clearInterval(interval);
+            running = false;
+            btn.textContent = '▶ Start Session';
+            seconds = totalSecs;
+            display.textContent = formatTime(seconds);
+            updateRing(seconds);
+            return;
+          }
+          seconds--;
+          display.textContent = formatTime(seconds);
+          updateRing(seconds);
+        }, 1000);
+      } else {
+        clearInterval(interval);
+        running = false;
+        btn.textContent = '▶ Start Session';
+      }
+    });
+
+    // ── MODE TABS ──
+    document.querySelectorAll('.mode-tab').forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        clearInterval(interval);
+        running = false;
+        btn.textContent = '▶ Start Session';
+        const durations = [25*60, 5*60, 15*60];
+        seconds = durations[i];
+        display.textContent = formatTime(seconds);
+        updateRing(seconds);
+        // update circumference base
+        Object.defineProperty(window, '_totalSecs', { value: durations[i], writable: true });
+      });
+    });
+  </script>
 </body>
-
 </html>
